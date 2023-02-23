@@ -55,6 +55,7 @@
 #define SAFETY_HYUNDAI_CANFD 28U
 #define SAFETY_VOLVO_C1 29U
 #define SAFETY_VOLVO_EUCD 30U
+#define SAFETY_MAZDA_2019 31U
 
 uint16_t current_safety_mode = SAFETY_SILENT;
 uint16_t current_safety_param = 0;
