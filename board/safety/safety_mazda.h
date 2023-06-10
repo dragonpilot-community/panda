@@ -132,7 +132,7 @@ static int mazda_tx_hook(CANPacket_t *to_send) {
   return tx;
 }
 
-static int mazda_fwd_hook(int bus, static int, int addr) {
+static int mazda_fwd_hook(int bus, int addr) {
   int bus_fwd = -1;
   int addr = GET_ADDR(to_fwd);
 
