@@ -185,9 +185,9 @@ class Panda:
   CAN_PACKET_VERSION = 4
   HEALTH_PACKET_VERSION = 14
   CAN_HEALTH_PACKET_VERSION = 4
-  # dp - 2 extra "B" at the end:
-  # "usb_power_mode": a[23],
-  # "torque_interceptor_detected": a[24],
+  # dp - 2 extra "B" at the end (Bool):
+  # "usb_power_mode": a[27],
+  # "torque_interceptor_detected": a[28],
   HEALTH_STRUCT = struct.Struct("<IIIIIIIIIBBBBBBHBBBHfBBHBHHBB")
   CAN_HEALTH_STRUCT = struct.Struct("<BIBBBBBBBBIIIIIIIHHBBB")
 
