@@ -89,7 +89,7 @@ static int mazda_rx_hook(CANPacket_t *to_push) {
   if (valid && (GET_BUS(to_push) == MAZDA_AUX)) {
     int addr = GET_ADDR(to_push);
     if (addr == TI_STEER_TORQUE) {
-      int torque_driver_new = GET_BYTE(to_push, 0) - 126;
+      int torque_driver_new = GET_BYTE(to_push, 0) - 126U;
       update_sample(&torque_driver, torque_driver_new);
     }
   }
