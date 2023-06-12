@@ -38,7 +38,7 @@ AddrCheckStruct mazda_addr_checks[] = {
 addr_checks mazda_rx_checks = {mazda_addr_checks, MAZDA_ADDR_CHECKS_LEN};
 
 AddrCheckStruct mazda_ti_addr_checks[] = {
-  {.msg = {{TI_STEER_TORQUE,    1, 8, .expected_timestep = 22000U}}},
+  {.msg = {{TI_STEER_TORQUE,    1, 8, .expected_timestep = 22000U}, { 0 }, { 0 }}},
   // TI_STEER_TORQUE expected_timestep should be the same as the tx rate of MAZDA_LKAS2
 };
 #define MAZDA_TI_ADDR_CHECKS_LEN (sizeof(mazda_ti_addr_checks) / sizeof(mazda_ti_addr_checks[0]))
