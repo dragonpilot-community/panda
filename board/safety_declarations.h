@@ -23,7 +23,8 @@ uint32_t GET_BYTES(const CANPacket_t *msg, int start, int len) {
 
 const int MAX_WRONG_COUNTERS = 5;
 const uint8_t MAX_MISSED_MSGS = 10U;
-#define MAX_ADDR_CHECK_MSGS 3U
+// rick - 3U will cause panda timed out onroad by safety_honda.h, so we need to increase it to 4U
+#define MAX_ADDR_CHECK_MSGS 4U
 #define MAX_SAMPLE_VALS 6
 // used to represent floating point vehicle speed in a sample_t
 #define VEHICLE_SPEED_FACTOR 100.0
