@@ -23,9 +23,10 @@ void black_enable_can_transceiver(uint8_t transceiver, bool enabled) {
 }
 
 void black_enable_can_transceivers(bool enabled) {
-  for(uint8_t i=1U; i<=4U; i++){
+  uint8_t main_bus = (harness.status == HARNESS_STATUS_FLIPPED) ? 3U : 1U;
+  for (uint8_t i=1U; i<=4U; i++) {
     // Leave main CAN always on for CAN-based ignition detection
-    if((harness.status == HARNESS_STATUS_FLIPPED) ? (i == 3U) : (i == 1U)){
+    if (i == main_bus) {
       black_enable_can_transceiver(i, true);
     } else {
       black_enable_can_transceiver(i, enabled);
