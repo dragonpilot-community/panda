@@ -1,4 +1,4 @@
-static bool elm327_tx_hook(CANPacket_t *to_send) {
+static bool elm327_tx_hook(const CANPacket_t *to_send) {
   bool tx = true;
   int addr = GET_ADDR(to_send);
   int len = GET_LEN(to_send);
@@ -17,6 +17,7 @@ static bool elm327_tx_hook(CANPacket_t *to_send) {
   return tx;
 }
 
+// rick - keep it for legacy support
 static bool elm327_tx_lin_hook(int lin_num, uint8_t *data, int len) {
   bool tx = true;
   if (lin_num != 0) {
@@ -37,6 +38,7 @@ const safety_hooks elm327_hooks = {
   .init = nooutput_init,
   .rx = default_rx_hook,
   .tx = elm327_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = elm327_tx_lin_hook,
   .fwd = default_fwd_hook,
 };

@@ -64,7 +64,7 @@ enum {GM_ASCM, GM_CAM} gm_hw = GM_ASCM;
 bool gm_cam_long = false;
 bool gm_pcm_cruise = false;
 
-static void gm_rx_hook(CANPacket_t *to_push) {
+static void gm_rx_hook(const CANPacket_t *to_push) {
   if (GET_BUS(to_push) == 0U) {
     int addr = GET_ADDR(to_push);
 
@@ -135,7 +135,7 @@ static void gm_rx_hook(CANPacket_t *to_push) {
   }
 }
 
-static bool gm_tx_hook(CANPacket_t *to_send) {
+static bool gm_tx_hook(const CANPacket_t *to_send) {
   bool tx = true;
   int addr = GET_ADDR(to_send);
 
@@ -240,6 +240,7 @@ const safety_hooks gm_hooks = {
   .init = gm_init,
   .rx = gm_rx_hook,
   .tx = gm_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = gm_fwd_hook,
 };

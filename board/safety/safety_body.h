@@ -6,7 +6,7 @@ RxCheck body_rx_checks[] = {
   {.msg = {{0x201, 0, 8, .check_checksum = false, .max_counter = 0U, .frequency = 100U}, { 0 }, { 0 }}},
 };
 
-static void body_rx_hook(CANPacket_t *to_push) {
+static void body_rx_hook(const CANPacket_t *to_push) {
   // body is never at standstill
   vehicle_moving = true;
 
@@ -15,7 +15,7 @@ static void body_rx_hook(CANPacket_t *to_push) {
   }
 }
 
-static bool body_tx_hook(CANPacket_t *to_send) {
+static bool body_tx_hook(const CANPacket_t *to_send) {
   bool tx = true;
   int addr = GET_ADDR(to_send);
   int len = GET_LEN(to_send);
@@ -42,6 +42,7 @@ const safety_hooks body_hooks = {
   .init = body_init,
   .rx = body_rx_hook,
   .tx = body_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = default_fwd_hook,
 };

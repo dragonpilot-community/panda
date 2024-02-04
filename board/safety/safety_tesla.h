@@ -54,7 +54,7 @@ bool tesla_powertrain = false;  // Are we the second panda intercepting the powe
 
 bool tesla_stock_aeb = false;
 
-static void tesla_rx_hook(CANPacket_t *to_push) {
+static void tesla_rx_hook(const CANPacket_t *to_push) {
   int bus = GET_BUS(to_push);
   int addr = GET_ADDR(to_push);
 
@@ -116,7 +116,7 @@ static void tesla_rx_hook(CANPacket_t *to_push) {
 }
 
 
-static bool tesla_tx_hook(CANPacket_t *to_send) {
+static bool tesla_tx_hook(const CANPacket_t *to_send) {
   bool tx = true;
   int addr = GET_ADDR(to_send);
   bool violation = false;
@@ -222,6 +222,7 @@ const safety_hooks tesla_hooks = {
   .init = tesla_init,
   .rx = tesla_rx_hook,
   .tx = tesla_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = tesla_fwd_hook,
 };

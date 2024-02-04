@@ -14,10 +14,9 @@ int get_health_pkt(void *dat) {
 
   // Use the GPIO pin to determine ignition or use a CAN based logic
   health->ignition_line_pkt = (uint8_t)(current_board->check_ignition());
-  health->ignition_can_pkt = (uint8_t)(ignition_can);
+  health->ignition_can_pkt = ignition_can;
 
   health->controls_allowed_pkt = controls_allowed;
-  health->gas_interceptor_detected_pkt = gas_interceptor_detected;
   health->safety_tx_blocked_pkt = safety_tx_blocked;
   health->safety_rx_invalid_pkt = safety_rx_invalid;
   health->tx_buffer_overflow_pkt = tx_buffer_overflow;
@@ -27,8 +26,8 @@ int get_health_pkt(void *dat) {
   health->safety_mode_pkt = (uint8_t)(current_safety_mode);
   health->safety_param_pkt = current_safety_param;
   health->alternative_experience_pkt = alternative_experience;
-  health->power_save_enabled_pkt = (uint8_t)(power_save_status == POWER_SAVE_STATUS_ENABLED);
-  health->heartbeat_lost_pkt = (uint8_t)(heartbeat_lost);
+  health->power_save_enabled_pkt = power_save_status == POWER_SAVE_STATUS_ENABLED;
+  health->heartbeat_lost_pkt = heartbeat_lost;
   health->safety_rx_checks_invalid = safety_rx_checks_invalid;
 
   health->spi_checksum_error_count = spi_checksum_error_count;
