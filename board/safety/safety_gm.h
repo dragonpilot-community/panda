@@ -240,6 +240,7 @@ const safety_hooks gm_hooks = {
   .init = gm_init,
   .rx = gm_rx_hook,
   .tx = gm_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = gm_fwd_hook,
 };

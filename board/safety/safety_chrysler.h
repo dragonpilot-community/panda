@@ -120,8 +120,8 @@ const CanMsg CHRYSLER_RAM_HD_TX_MSGS[] = {
 RxCheck chrysler_rx_checks[] = {
   {.msg = {{CHRYSLER_ADDRS_EPS_2, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 100U}, { 0 }, { 0 }}},
   {.msg = {{CHRYSLER_ADDRS_ESP_1, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 50U}, { 0 }, { 0 }}},
-  //{.msg = {{ESP_8, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 20000U}}},
-  {.msg = {{514, 0, 8, .check_checksum = false, .max_counter = 0U, .frequency = 10000U}, { 0 }, { 0 }}},
+  //{.msg = {{ESP_8, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 50U}}},
+  {.msg = {{514, 0, 8, .check_checksum = false, .max_counter = 0U, .frequency = 100U}, { 0 }, { 0 }}},
   {.msg = {{CHRYSLER_ADDRS_ECM_5, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 50U}, { 0 }, { 0 }}},
   {.msg = {{CHRYSLER_ADDRS_DAS_3, 0, 8, .check_checksum = true, .max_counter = 15U, .frequency = 50U}, { 0 }, { 0 }}},
 };
@@ -310,6 +310,7 @@ const safety_hooks chrysler_hooks = {
   .init = chrysler_init,
   .rx = chrysler_rx_hook,
   .tx = chrysler_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = chrysler_fwd_hook,
   .get_counter = chrysler_get_counter,

@@ -85,6 +85,7 @@ bool safety_tx_hook(CANPacket_t *to_send) {
   return !relay_malfunction && whitelisted && safety_allowed;
 }
 
+// rick - keep it for legacy support
 bool safety_tx_lin_hook(int lin_num, uint8_t *data, int len) {
   return current_hooks->tx_lin(lin_num, data, len);
 }
@@ -336,7 +337,7 @@ int set_safety_hooks(uint16_t mode, uint16_t param) {
   // reset state set by safety mode
   safety_mode_cnt = 0U;
   relay_malfunction = false;
-  gas_interceptor_detected = false;
+  enable_gas_interceptor = false;
   gas_interceptor_prev = 0;
   gas_pressed = false;
   gas_pressed_prev = false;

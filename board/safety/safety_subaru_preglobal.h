@@ -122,6 +122,7 @@ const safety_hooks subaru_preglobal_hooks = {
   .init = subaru_preglobal_init,
   .rx = subaru_preglobal_rx_hook,
   .tx = subaru_preglobal_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = subaru_preglobal_fwd_hook,
 };

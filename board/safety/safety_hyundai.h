@@ -327,6 +327,7 @@ const safety_hooks hyundai_hooks = {
   .init = hyundai_init,
   .rx = hyundai_rx_hook,
   .tx = hyundai_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = hyundai_fwd_hook,
   .get_counter = hyundai_get_counter,
@@ -338,6 +339,7 @@ const safety_hooks hyundai_legacy_hooks = {
   .init = hyundai_legacy_init,
   .rx = hyundai_rx_hook,
   .tx = hyundai_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = hyundai_fwd_hook,
   .get_counter = hyundai_get_counter,

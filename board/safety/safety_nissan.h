@@ -104,7 +104,7 @@ static bool nissan_tx_hook(CANPacket_t *to_send) {
     bool lka_active = (GET_BYTE(to_send, 6) >> 4) & 1U;
 
     // Factor is -0.01, offset is 1310. Flip to correct sign, but keep units in CAN scale
-    desired_angle = -desired_angle + (1310 * NISSAN_STEERING_LIMITS.angle_deg_to_can);
+    desired_angle = -desired_angle + (1310.0f * NISSAN_STEERING_LIMITS.angle_deg_to_can);
 
     if (steer_angle_cmd_checks(desired_angle, lka_active, NISSAN_STEERING_LIMITS)) {
       violation = true;
@@ -155,6 +155,7 @@ const safety_hooks nissan_hooks = {
   .init = nissan_init,
   .rx = nissan_rx_hook,
   .tx = nissan_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = nissan_fwd_hook,
 };

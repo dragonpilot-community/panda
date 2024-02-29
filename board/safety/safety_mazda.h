@@ -125,6 +125,7 @@ const safety_hooks mazda_hooks = {
   .init = mazda_init,
   .rx = mazda_rx_hook,
   .tx = mazda_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = mazda_fwd_hook,
 };

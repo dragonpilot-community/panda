@@ -150,6 +150,7 @@ typedef bool (*get_quality_flag_valid_t)(CANPacket_t *to_push);
 
 bool safety_rx_hook(CANPacket_t *to_push);
 bool safety_tx_hook(CANPacket_t *to_send);
+  // rick - keep it for legacy support
 bool safety_tx_lin_hook(int lin_num, uint8_t *data, int len);
 uint32_t get_ts_elapsed(uint32_t ts, uint32_t ts_last);
 int to_signed(int d, int bits);
@@ -216,7 +217,7 @@ void safety_tick(const safety_config *safety_config);
 // This can be set by the safety hooks
 bool controls_allowed = false;
 bool relay_malfunction = false;
-bool gas_interceptor_detected = false;
+bool enable_gas_interceptor = false;
 int gas_interceptor_prev = 0;
 bool gas_pressed = false;
 bool gas_pressed_prev = false;
@@ -265,7 +266,11 @@ struct sample_t angle_meas;         // last 6 steer angles/curvatures
 // See ISO 15622:2018 for more information.
 #define ALT_EXP_RAISE_LONGITUDINAL_LIMITS_TO_ISO_MAX 8
 
-#define ALT_EXP_ALKA 16
+// This flag allows AEB to be commanded from openpilot.
+#define ALT_EXP_ALLOW_AEB 16
+
+// rick - for ALKA
+#define ALT_EXP_ALKA 32
 
 int alternative_experience = 0;
 

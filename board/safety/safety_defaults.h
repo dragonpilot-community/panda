@@ -14,6 +14,7 @@ static bool nooutput_tx_hook(CANPacket_t *to_send) {
   return false;
 }
 
+// rick - keep it for legacy support
 static bool nooutput_tx_lin_hook(int lin_num, uint8_t *data, int len) {
   UNUSED(lin_num);
   UNUSED(data);
@@ -31,6 +32,7 @@ const safety_hooks nooutput_hooks = {
   .init = nooutput_init,
   .rx = default_rx_hook,
   .tx = nooutput_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = default_fwd_hook,
 };
@@ -52,6 +54,7 @@ static bool alloutput_tx_hook(CANPacket_t *to_send) {
   return true;
 }
 
+// rick - keep it for legacy support
 static bool alloutput_tx_lin_hook(int lin_num, uint8_t *data, int len) {
   UNUSED(lin_num);
   UNUSED(data);
@@ -79,6 +82,7 @@ const safety_hooks alloutput_hooks = {
   .init = alloutput_init,
   .rx = default_rx_hook,
   .tx = alloutput_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = alloutput_tx_lin_hook,
   .fwd = alloutput_fwd_hook,
 };

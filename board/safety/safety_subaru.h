@@ -287,6 +287,7 @@ const safety_hooks subaru_hooks = {
   .init = subaru_init,
   .rx = subaru_rx_hook,
   .tx = subaru_tx_hook,
+  // rick - keep it for legacy support
   .tx_lin = nooutput_tx_lin_hook,
   .fwd = subaru_fwd_hook,
   .get_counter = subaru_get_counter,

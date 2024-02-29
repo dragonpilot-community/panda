@@ -31,10 +31,6 @@ void set_relay_malfunction(bool c){
   relay_malfunction = c;
 }
 
-void set_gas_interceptor_detected(bool c){
-  gas_interceptor_detected = c;
-}
-
 bool get_controls_allowed(void){
   return controls_allowed;
 }
@@ -45,10 +41,6 @@ int get_alternative_experience(void){
 
 bool get_relay_malfunction(void){
   return relay_malfunction;
-}
-
-bool get_gas_interceptor_detected(void){
-  return gas_interceptor_detected;
 }
 
 int get_gas_interceptor_prev(void){
@@ -89,6 +81,10 @@ int get_vehicle_speed_min(void){
 
 int get_vehicle_speed_max(void){
   return vehicle_speed.max;
+}
+
+int get_vehicle_speed_last(void){
+  return vehicle_speed.values[0];
 }
 
 int get_current_safety_mode(void){
@@ -145,6 +141,15 @@ void set_desired_angle_last(int t){
   desired_angle_last = t;
 }
 
+int get_desired_angle_last(void){
+  return desired_angle_last;
+}
+
+void set_angle_meas(int min, int max){
+  angle_meas.min = min;
+  angle_meas.max = max;
+}
+
 int get_angle_meas_min(void){
   return angle_meas.min;
 }
@@ -172,6 +177,10 @@ void set_honda_fwd_brake(bool c){
   honda_fwd_brake = c;
 }
 
+bool get_honda_fwd_brake(void){
+  return honda_fwd_brake;
+}
+
 void init_tests(void){
   // get HW_TYPE from env variable set in test.sh
   if (getenv("HW_TYPE")) {
@@ -183,10 +192,6 @@ void init_tests(void){
   ts_steer_req_mismatch_last = 0;
   valid_steer_req_count = 0;
   invalid_steer_req_count = 0;
-
-  // car-specific stuff
-  honda_fwd_brake = false;
-  tesla_stock_aeb = false;
 }
 
 void set_gmlan_digital_output(int to_set){
