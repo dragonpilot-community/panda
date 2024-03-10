@@ -427,8 +427,14 @@ int main(void) {
   // enable CAN TXs
   current_board->enable_can_transceivers(true);
 
+  // rick - less strict check, resolve ~1 hr relay malfunction issue?
+  #if 0
   // init watchdog for heartbeat loop, fed at 8Hz
   simple_watchdog_init(FAULT_HEARTBEAT_LOOP_WATCHDOG, (3U * 1000000U / 8U));
+  #else
+  simple_watchdog_init(FAULT_HEARTBEAT_LOOP_WATCHDOG, (4U * 1000000U / 8U));
+  #endif
+
 
   // 8Hz timer
   REGISTER_INTERRUPT(TICK_TIMER_IRQ, tick_handler, 10U, FAULT_INTERRUPT_RATE_TICK)
