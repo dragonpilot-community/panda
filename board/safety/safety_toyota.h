@@ -51,6 +51,7 @@ const uint32_t TOYOTA_EPS_FACTOR = (1U << TOYOTA_PARAM_OFFSET) - 1U;
 const uint32_t TOYOTA_PARAM_ALT_BRAKE = 1U << TOYOTA_PARAM_OFFSET;
 const uint32_t TOYOTA_PARAM_STOCK_LONGITUDINAL = 2U << TOYOTA_PARAM_OFFSET;
 const uint32_t TOYOTA_PARAM_LTA = 4U << TOYOTA_PARAM_OFFSET;
+const uint32_t TOYOTA_PARAM_GAS_INTERCEPTOR = 8UL << TOYOTA_PARAM_OFFSET;
 
 bool toyota_alt_brake = false;
 bool toyota_stock_longitudinal = false;
@@ -217,6 +218,10 @@ static safety_config toyota_init(uint16_t param) {
   toyota_stock_longitudinal = GET_FLAG(param, TOYOTA_PARAM_STOCK_LONGITUDINAL);
   toyota_dbc_eps_torque_factor = param & TOYOTA_EPS_FACTOR;
   enable_gas_interceptor = GET_FLAG(param, TOYOTA_PARAM_GAS_INTERCEPTOR);
+
+  if (toyota_stock_longitudinal) {
+    enable_gas_interceptor = false;
+  }
 
 #ifdef ALLOW_DEBUG
   toyota_lta = GET_FLAG(param, TOYOTA_PARAM_LTA);
