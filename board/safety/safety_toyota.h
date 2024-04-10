@@ -100,7 +100,7 @@ static void toyota_rx_hook(CANPacket_t *to_push) {
       pcm_cruise_check(cruise_engaged);
 
       // sample gas pedal
-      if (!gas_interceptor_detected) {
+      if (!enable_gas_interceptor) {
         gas_pressed = GET_BIT(to_push, 4U) == 0U;
       }
     }
@@ -118,8 +118,7 @@ static void toyota_rx_hook(CANPacket_t *to_push) {
     }
 
     // sample gas interceptor
-    if (addr == 0x201) {
-      gas_interceptor_detected = 1;
+    if ((addr == 0x201) && enable_gas_interceptor) {
       int gas_interceptor = TOYOTA_GET_INTERCEPTOR(to_push);
       gas_pressed = gas_interceptor > TOYOTA_GAS_INTERCEPTOR_THRSLD;
 
@@ -217,6 +216,7 @@ static safety_config toyota_init(uint16_t param) {
   toyota_alt_brake = GET_FLAG(param, TOYOTA_PARAM_ALT_BRAKE);
   toyota_stock_longitudinal = GET_FLAG(param, TOYOTA_PARAM_STOCK_LONGITUDINAL);
   toyota_dbc_eps_torque_factor = param & TOYOTA_EPS_FACTOR;
+  enable_gas_interceptor = GET_FLAG(param, TOYOTA_PARAM_GAS_INTERCEPTOR);
 
 #ifdef ALLOW_DEBUG
   toyota_lta = GET_FLAG(param, TOYOTA_PARAM_LTA);
