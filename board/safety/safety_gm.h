@@ -135,12 +135,6 @@ static void gm_rx_hook(CANPacket_t *to_push) {
   }
 }
 
-// all commands: gas/regen, friction brake and steering
-// if controls_allowed and no pedals pressed
-//     allow all commands up to limit
-// else
-//     block all commands that produce actuation
-
 static bool gm_tx_hook(CANPacket_t *to_send) {
   int tx = 1;
   int addr = GET_ADDR(to_send);
@@ -191,12 +185,10 @@ static bool gm_tx_hook(CANPacket_t *to_send) {
     }
   }
 
-  // 1 allows the message through
   return tx;
 }
 
 static int gm_fwd_hook(int bus_num, int addr) {
-
   int bus_fwd = -1;
 
   if (gm_hw == GM_CAM) {
@@ -212,7 +204,7 @@ static int gm_fwd_hook(int bus_num, int addr) {
       // block lkas message and acc messages if gm_cam_long, forward all others
       bool is_lkas_msg = (addr == 0x180);
       bool is_acc_msg = (addr == 0x315) || (addr == 0x2CB) || (addr == 0x370);
-      int block_msg = is_lkas_msg || (is_acc_msg && gm_cam_long);
+      bool block_msg = is_lkas_msg || (is_acc_msg && gm_cam_long);
       if (!block_msg) {
         bus_fwd = 0;
       }
