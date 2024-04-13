@@ -198,7 +198,7 @@ static void volkswagen_mqb_rx_hook(const CANPacket_t *to_push) {
 
 static bool volkswagen_mqb_tx_hook(const CANPacket_t *to_send) {
   int addr = GET_ADDR(to_send);
-  int tx = 1;
+  bool tx = true;
 
   // Safety check for HCA_01 Heading Control Assist torque
   // Signal: HCA_01.HCA_01_LM_Offset (absolute torque)
@@ -213,7 +213,7 @@ static bool volkswagen_mqb_tx_hook(const CANPacket_t *to_send) {
     bool steer_req = GET_BIT(to_send, 30U);
 
     if (steer_torque_cmd_checks(desired_torque, steer_req, VOLKSWAGEN_MQB_STEERING_LIMITS)) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -237,7 +237,7 @@ static bool volkswagen_mqb_tx_hook(const CANPacket_t *to_send) {
     violation |= longitudinal_accel_checks(desired_accel, VOLKSWAGEN_MQB_LONG_LIMITS);
 
     if (violation) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -246,7 +246,7 @@ static bool volkswagen_mqb_tx_hook(const CANPacket_t *to_send) {
   if ((addr == MSG_GRA_ACC_01) && !controls_allowed) {
     // disallow resume and set: bits 16 and 19
     if ((GET_BYTE(to_send, 2) & 0x9U) != 0U) {
-      tx = 0;
+      tx = false;
     }
   }
 

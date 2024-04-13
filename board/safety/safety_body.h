@@ -21,13 +21,13 @@ static bool body_tx_hook(const CANPacket_t *to_send) {
   int len = GET_LEN(to_send);
 
   if (!controls_allowed && (addr != 0x1)) {
-    tx = 0;
+    tx = false;
   }
 
   // Allow going into CAN flashing mode for base & knee even if controls are not allowed
   bool flash_msg = ((addr == 0x250) || (addr == 0x350)) && (len == 8);
   if (!controls_allowed && (GET_BYTES(to_send, 0, 4) == 0xdeadfaceU) && (GET_BYTES(to_send, 4, 4) == 0x0ab00b1eU) && flash_msg) {
-    tx = 1;
+    tx = true;
   }
 
   return tx;

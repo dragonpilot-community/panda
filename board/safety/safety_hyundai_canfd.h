@@ -271,11 +271,11 @@ static bool hyundai_canfd_tx_hook(const CANPacket_t *to_send) {
       }
 
       if (violation) {
-        tx = 0;
+        tx = false;
       }
     } else {
       if (steer_torque_cmd_checks(desired_torque, steer_req, HYUNDAI_CANFD_STEERING_LIMITS)) {
-        tx = 0;
+        tx = false;
       }
     }
   }
@@ -288,14 +288,14 @@ static bool hyundai_canfd_tx_hook(const CANPacket_t *to_send) {
 
     bool allowed = (is_cancel && cruise_engaged_prev) || (is_resume && controls_allowed);
     if (!allowed) {
-      tx = 0;
+      tx = false;
     }
   }
 
   // UDS: only tester present ("\x02\x3E\x80\x00\x00\x00\x00\x00") allowed on diagnostics address
   if ((addr == 0x730) && hyundai_canfd_hda2) {
     if ((GET_BYTES(to_send, 0, 4) != 0x00803E02U) || (GET_BYTES(to_send, 4, 4) != 0x0U)) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -317,7 +317,7 @@ static bool hyundai_canfd_tx_hook(const CANPacket_t *to_send) {
     }
 
     if (violation) {
-      tx = 0;
+      tx = false;
     }
   }
 

@@ -264,7 +264,6 @@ static bool ford_tx_hook(const CANPacket_t *to_send) {
   bool tx = true;
 
   int addr = GET_ADDR(to_send);
-  int tx;
 
   // Safety check for ACCDATA accel and brake requests
   if (addr == FORD_ACCDATA) {
@@ -286,7 +285,7 @@ static bool ford_tx_hook(const CANPacket_t *to_send) {
     violation |= cmbb_deny; // do not prevent stock AEB actuation
 
     if (violation) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -301,7 +300,7 @@ static bool ford_tx_hook(const CANPacket_t *to_send) {
     violation |= GET_BIT(to_send, 25U) && !controls_allowed;     // Signal: CcAsllButtnResPress (resume)
 
     if (violation) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -313,7 +312,7 @@ static bool ford_tx_hook(const CANPacket_t *to_send) {
     // but the action (LkaActvStats_D2_Req) must be set to zero.
     unsigned int action = GET_BYTE(to_send, 0) >> 5;
     if (action != 0U) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -334,7 +333,7 @@ static bool ford_tx_hook(const CANPacket_t *to_send) {
     violation |= steer_angle_cmd_checks(desired_curvature, steer_control_enabled, FORD_STEERING_LIMITS);
 
     if (violation) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -355,7 +354,7 @@ static bool ford_tx_hook(const CANPacket_t *to_send) {
     violation |= steer_angle_cmd_checks(desired_curvature, steer_control_enabled, FORD_STEERING_LIMITS);
 
     if (violation) {
-      tx = 0;
+      tx = false;
     }
   }
 

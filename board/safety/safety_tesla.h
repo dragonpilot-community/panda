@@ -168,7 +168,7 @@ static bool tesla_tx_hook(const CANPacket_t *to_send) {
   }
 
   if (violation) {
-    tx = 0;
+    tx = false;
   }
 
   return tx;

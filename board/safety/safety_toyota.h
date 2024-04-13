@@ -172,7 +172,7 @@ static bool toyota_tx_hook(const CANPacket_t *to_send) {
     // GAS PEDAL: safety check
     if (addr == 0x200) {
       if (longitudinal_interceptor_checks(to_send)) {
-        tx = 0;
+        tx = false;
       }
     }
 
@@ -196,7 +196,7 @@ static bool toyota_tx_hook(const CANPacket_t *to_send) {
       }
 
       if (violation) {
-        tx = 0;
+        tx = false;
       }
     }
 
@@ -205,7 +205,7 @@ static bool toyota_tx_hook(const CANPacket_t *to_send) {
       // only allow the checksum, which is the last byte
       bool block = (GET_BYTES(to_send, 0, 4) != 0U) || (GET_BYTE(to_send, 4) != 0U) || (GET_BYTE(to_send, 5) != 0U);
       if (block) {
-        tx = 0;
+        tx = false;
       }
     }
 
@@ -222,37 +222,37 @@ static bool toyota_tx_hook(const CANPacket_t *to_send) {
       if (!toyota_lta) {
         // using torque (LKA), block LTA msgs with actuation requests
         if (steer_control_enabled || (lta_angle != 0) || (torque_wind_down != 0)) {
-          tx = 0;
+          tx = false;
         }
       } else {
         // check angle rate limits and inactive angle
         if (steer_angle_cmd_checks(lta_angle, steer_control_enabled, TOYOTA_STEERING_LIMITS)) {
-          tx = 0;
+          tx = false;
         }
 
         if (lta_request != lta_request2) {
-          tx = 0;
+          tx = false;
         }
 
         // TORQUE_WIND_DOWN is gated on steer request
         if (!steer_control_enabled && (torque_wind_down != 0)) {
-          tx = 0;
+          tx = false;
         }
 
         // TORQUE_WIND_DOWN can only be no or full torque
         if ((torque_wind_down != 0) && (torque_wind_down != 100)) {
-          tx = 0;
+          tx = false;
         }
 
         // check if we should wind down torque
         int driver_torque = MIN(ABS(torque_driver.min), ABS(torque_driver.max));
         if ((driver_torque > TOYOTA_LTA_MAX_DRIVER_TORQUE) && (torque_wind_down != 0)) {
-          tx = 0;
+          tx = false;
         }
 
         int eps_torque = MIN(ABS(torque_meas.min), ABS(torque_meas.max));
         if ((eps_torque > TOYOTA_LTA_MAX_MEAS_TORQUE) && (torque_wind_down != 0)) {
-          tx = 0;
+          tx = false;
         }
       }
     }
@@ -265,15 +265,31 @@ static bool toyota_tx_hook(const CANPacket_t *to_send) {
       // When using LTA (angle control), assert no actuation on LKA message
       if (!toyota_lta) {
         if (steer_torque_cmd_checks(desired_torque, steer_req, TOYOTA_STEERING_LIMITS)) {
-          tx = 0;
+          tx = false;
         }
       } else {
         if ((desired_torque != 0) || steer_req) {
-          tx = 0;
+          tx = false;
         }
       }
     }
   }
+  #if 0
+  // UDS: Only tester present ("\x0F\x02\x3E\x00\x00\x00\x00\x00") allowed on diagnostics address
+  if (addr == 0x750) {
+    // this address is sub-addressed. only allow tester present to radar (0xF)
+    bool invalid_uds_msg = (GET_BYTES(to_send, 0, 4) != 0x003E020FU) || (GET_BYTES(to_send, 4, 4) != 0x0U);
+
+    // DP: Secret sauce.
+    bool dp_valid_uds_msgs = (GET_BYTES(to_send, 0, 4) == 0x10002141) || (GET_BYTES(to_send, 0, 4) == 0x60100241) || (GET_BYTES(to_send, 0, 4) == 0x69210241);
+    dp_valid_uds_msgs |= (GET_BYTES(to_send, 0, 4) == 0x10002142) || (GET_BYTES(to_send, 0, 4) == 0x60100242) || (GET_BYTES(to_send, 0, 4) == 0x10002142) || (GET_BYTES(to_send, 0, 4) == 0x69210242);
+    dp_valid_uds_msgs |= (GET_BYTES(to_send, 0, 4) == 0x11300540);
+
+    if (invalid_uds_msg && !dp_valid_uds_msgs) {
+      tx = false;
+    }
+  }
+  #endif
 
   return tx;
 }

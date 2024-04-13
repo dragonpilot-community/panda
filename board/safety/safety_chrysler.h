@@ -252,7 +252,7 @@ static bool chrysler_tx_hook(const CANPacket_t *to_send) {
 
     bool steer_req = (chrysler_platform == CHRYSLER_PACIFICA) ? GET_BIT(to_send, 4U) : (GET_BYTE(to_send, 3) & 0x7U) == 2U;
     if (steer_torque_cmd_checks(desired_torque, steer_req, limits)) {
-      tx = 0;
+      tx = false;
     }
   }
 
@@ -262,7 +262,7 @@ static bool chrysler_tx_hook(const CANPacket_t *to_send) {
     const bool is_resume = GET_BYTE(to_send, 0) == 0x10U;
     const bool allowed = is_cancel || (is_resume && controls_allowed);
     if (!allowed) {
-      tx = 0;
+      tx = false;
     }
   }
 
