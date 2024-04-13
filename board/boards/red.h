@@ -49,6 +49,10 @@ void red_set_led(uint8_t color, bool enabled) {
   }
 }
 
+void red_set_usb_load_switch(bool enabled) {
+  set_gpio_output(GPIOB, 14, !enabled);
+}
+
 void red_set_usb_power_mode(uint8_t mode) {
   bool valid = false;
   switch (mode) {
@@ -113,6 +117,13 @@ bool red_check_ignition(void) {
 
 void red_init(void) {
   common_init_gpio();
+
+  //C4,A1: OBD_SBU1, OBD_SBU2
+  set_gpio_pullup(GPIOC, 4, PULL_NONE);
+  set_gpio_mode(GPIOC, 4, MODE_ANALOG);
+
+  set_gpio_pullup(GPIOA, 1, PULL_NONE);
+  set_gpio_mode(GPIOA, 1, MODE_ANALOG);
 
   //C10,C11 : OBD_SBU1_RELAY, OBD_SBU2_RELAY
   set_gpio_output_type(GPIOC, 10, OUTPUT_TYPE_OPEN_DRAIN);
