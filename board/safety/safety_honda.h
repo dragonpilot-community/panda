@@ -140,7 +140,7 @@ static void honda_rx_hook(const CANPacket_t *to_push) {
 
   // enter controls when PCM enters cruise state
   if (pcm_cruise && (addr == 0x17C)) {
-    const bool cruise_engaged = GET_BIT(to_push, 38U) != 0U;
+    const bool cruise_engaged = GET_BIT(to_push, 38U);
     // engage on rising edge
     if (cruise_engaged && !cruise_engaged_prev) {
       controls_allowed = true;
@@ -181,13 +181,13 @@ static void honda_rx_hook(const CANPacket_t *to_push) {
   // accord, crv: 0x1BE
   if (honda_alt_brake_msg) {
     if (addr == 0x1BE) {
-      brake_pressed = GET_BIT(to_push, 4U) != 0U;
+      brake_pressed = GET_BIT(to_push, 4U);
     }
   } else {
     if (addr == 0x17C) {
       // also if brake switch is 1 for two CAN frames, as brake pressed is delayed
-      const bool brake_switch = GET_BIT(to_push, 32U) != 0U;
-      brake_pressed = (GET_BIT(to_push, 53U) != 0U) || (brake_switch && honda_brake_switch_prev);
+      const bool brake_switch = GET_BIT(to_push, 32U);
+      brake_pressed = (GET_BIT(to_push, 53U)) || (brake_switch && honda_brake_switch_prev);
       honda_brake_switch_prev = brake_switch;
     }
   }
@@ -208,7 +208,7 @@ static void honda_rx_hook(const CANPacket_t *to_push) {
   // disable stock Honda AEB in alternative experience
   if (!(alternative_experience & ALT_EXP_DISABLE_STOCK_AEB)) {
     if ((bus == 2) && (addr == 0x1FA)) {
-      bool honda_stock_aeb = GET_BIT(to_push, 29U) != 0U;
+      bool honda_stock_aeb = GET_BIT(to_push, 29U);
       int honda_stock_brake = (GET_BYTE(to_push, 0) << 2) | (GET_BYTE(to_push, 1) >> 6);
 
       // Forward AEB when stock braking is higher than openpilot braking
