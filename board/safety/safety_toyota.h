@@ -313,9 +313,11 @@ static bool toyota_tx_hook(const CANPacket_t *to_send) {
 static safety_config toyota_init(uint16_t param) {
   toyota_alt_brake = GET_FLAG(param, TOYOTA_PARAM_ALT_BRAKE);
   toyota_stock_longitudinal = GET_FLAG(param, TOYOTA_PARAM_STOCK_LONGITUDINAL);
-  toyota_dbc_eps_torque_factor = param & TOYOTA_EPS_FACTOR;
+  toyota_lta = GET_FLAG(param, TOYOTA_PARAM_LTA);
   enable_gas_interceptor = GET_FLAG(param, TOYOTA_PARAM_GAS_INTERCEPTOR);
+  toyota_dbc_eps_torque_factor = param & TOYOTA_EPS_FACTOR;
 
+  // Gas interceptor should not be used if openpilot is not controlling longitudinal
   if (toyota_stock_longitudinal) {
     enable_gas_interceptor = false;
   }
@@ -335,10 +337,10 @@ static int toyota_fwd_hook(int bus_num, int addr) {
   if (bus_num == 2) {
     // block stock lkas messages and stock acc messages (if OP is doing ACC)
     // in TSS2, 0x191 is LTA which we need to block to avoid controls collision
-    int is_lkas_msg = ((addr == 0x2E4) || (addr == 0x412) || (addr == 0x191));
+    bool is_lkas_msg = ((addr == 0x2E4) || (addr == 0x412) || (addr == 0x191));
     // in TSS2 the camera does ACC as well, so filter 0x343
-    int is_acc_msg = (addr == 0x343);
-    int block_msg = is_lkas_msg || (is_acc_msg && !toyota_stock_longitudinal);
+    bool is_acc_msg = (addr == 0x343);
+    bool block_msg = is_lkas_msg || (is_acc_msg && !toyota_stock_longitudinal);
     if (!block_msg) {
       bus_fwd = 0;
     }
