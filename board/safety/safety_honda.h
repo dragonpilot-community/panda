@@ -35,29 +35,29 @@ const LongitudinalLimits HONDA_NIDEC_LONG_LIMITS = {
 
 // Nidec and bosch radarless has the powertrain bus on bus 0
 RxCheck honda_common_rx_checks[] = {
-  {.msg = {{0x1A6, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 40000U},                   // SCM_BUTTONS
-           {0x296, 0, 4, .check_checksum = true, .max_counter = 3U, .expected_timestep = 40000U}, { 0 }}},
-  {.msg = {{0x158, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}, { 0 }, { 0 }}},   // ENGINE_DATA
-  {.msg = {{0x17C, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U},                   // POWERTRAIN_DATA
-           {0x1BE, 0, 3, .check_checksum = true, .max_counter = 3U, .expected_timestep = 20000U}, { 0 }}},          // BRAKE_MODULE (for bosch radarless)
-  {.msg = {{0x326, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 100000U}, { 0 }, { 0 }}},  // SCM_FEEDBACK
+  {.msg = {{0x1A6, 0, 8, .check_checksum = true, .max_counter = 3U, .frequency = 25U},                   // SCM_BUTTONS
+           {0x296, 0, 4, .check_checksum = true, .max_counter = 3U, .frequency = 25U}, { 0 }}},
+  {.msg = {{0x158, 0, 8, .check_checksum = true, .max_counter = 3U, .frequency = 100U}, { 0 }, { 0 }}},   // ENGINE_DATA
+  {.msg = {{0x17C, 0, 8, .check_checksum = true, .max_counter = 3U, .frequency = 100U},                   // POWERTRAIN_DATA
+           {0x1BE, 0, 3, .check_checksum = true, .max_counter = 3U, .frequency = 50U}, { 0 }}},          // BRAKE_MODULE (for bosch radarless)
+  {.msg = {{0x326, 0, 8, .check_checksum = true, .max_counter = 3U, .frequency = 10U}, { 0 }, { 0 }}},  // SCM_FEEDBACK
 };
 
 // For Nidecs with main on signal on an alternate msg
 RxCheck honda_nidec_alt_rx_checks[] = {
-  {.msg = {{0x1A6, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 40000U},
-           {0x296, 0, 4, .check_checksum = true, .max_counter = 3U, .expected_timestep = 40000U}, { 0 }}},
-  {.msg = {{0x158, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
-  {.msg = {{0x17C, 0, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
+  {.msg = {{0x1A6, 0, 8, .check_checksum = true, .max_counter = 3U, .frequency = 25U},
+           {0x296, 0, 4, .check_checksum = true, .max_counter = 3U, .frequency = 25U}, { 0 }}},
+  {.msg = {{0x158, 0, 8, .check_checksum = true, .max_counter = 3U, .frequency = 100U}, { 0 }, { 0 }}},
+  {.msg = {{0x17C, 0, 8, .check_checksum = true, .max_counter = 3U, .frequency = 100U}, { 0 }, { 0 }}},
 };
 
 // Bosch has pt on bus 1
 RxCheck honda_bosch_rx_checks[] = {
-  {.msg = {{0x296, 1, 4, .check_checksum = true, .max_counter = 3U, .expected_timestep = 40000U}, { 0 }, { 0 }}},
-  {.msg = {{0x158, 1, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U}, { 0 }, { 0 }}},
-  {.msg = {{0x17C, 1, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 10000U},
-           {0x1BE, 1, 3, .check_checksum = true, .max_counter = 3U, .expected_timestep = 20000U}, { 0 }}},
-  {.msg = {{0x326, 1, 8, .check_checksum = true, .max_counter = 3U, .expected_timestep = 100000U}, { 0 }, { 0 }}},
+  {.msg = {{0x296, 1, 4, .check_checksum = true, .max_counter = 3U, .frequency = 25U}, { 0 }, { 0 }}},
+  {.msg = {{0x158, 1, 8, .check_checksum = true, .max_counter = 3U, .frequency = 100U}, { 0 }, { 0 }}},
+  {.msg = {{0x17C, 1, 8, .check_checksum = true, .max_counter = 3U, .frequency = 100U},
+           {0x1BE, 1, 3, .check_checksum = true, .max_counter = 3U, .frequency = 50U}, { 0 }}},
+  {.msg = {{0x326, 1, 8, .check_checksum = true, .max_counter = 3U, .frequency = 10U}, { 0 }, { 0 }}},
 };
 
 const uint16_t HONDA_PARAM_ALT_BRAKE = 1;

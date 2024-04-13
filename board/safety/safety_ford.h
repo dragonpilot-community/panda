@@ -58,16 +58,16 @@ const CanMsg FORD_CANFD_LONG_TX_MSGS[] = {
 // warning: quality flags are not yet checked in openpilot's CAN parser,
 // this may be the cause of blocked messages
 RxCheck ford_rx_checks[] = {
-  {.msg = {{FORD_BrakeSysFeatures, 0, 8, .check_checksum = true, .max_counter = 15U, .quality_flag=true, .expected_timestep = 20000U}, { 0 }, { 0 }}},
+  {.msg = {{FORD_BrakeSysFeatures, 0, 8, .check_checksum = true, .max_counter = 15U, .quality_flag=true, .frequency = 50U}, { 0 }, { 0 }}},
   // FORD_EngVehicleSpThrottle2 has a counter that either randomly skips or by 2, likely ECU bug
   // Some hybrid models also experience a bug where this checksum mismatches for one or two frames under heavy acceleration with ACC
   // It has been confirmed that the Bronco Sport's camera only disallows ACC for bad quality flags, not counters or checksums, so we match that
-  {.msg = {{FORD_EngVehicleSpThrottle2, 0, 8, .check_checksum = false, .quality_flag=true, .expected_timestep = 20000U}, { 0 }, { 0 }}},
-  {.msg = {{FORD_Yaw_Data_FD1, 0, 8, .check_checksum = true, .max_counter = 255U, .quality_flag=true, .expected_timestep = 10000U}, { 0 }, { 0 }}},
+  {.msg = {{FORD_EngVehicleSpThrottle2, 0, 8, .check_checksum = false, .quality_flag=true, .frequency = 50U}, { 0 }, { 0 }}},
+  {.msg = {{FORD_Yaw_Data_FD1, 0, 8, .check_checksum = true, .max_counter = 255U, .quality_flag=true, .frequency = 100U}, { 0 }, { 0 }}},
   // These messages have no counter or checksum
-  {.msg = {{FORD_EngBrakeData, 0, 8, .expected_timestep = 100000U}, { 0 }, { 0 }}},
-  {.msg = {{FORD_EngVehicleSpThrottle, 0, 8, .expected_timestep = 10000U}, { 0 }, { 0 }}},
-  {.msg = {{FORD_DesiredTorqBrk, 0, 8, .expected_timestep = 20000U}, { 0 }, { 0 }}},
+  {.msg = {{FORD_EngBrakeData, 0, 8, .frequency = 10U}, { 0 }, { 0 }}},
+  {.msg = {{FORD_EngVehicleSpThrottle, 0, 8, .frequency = 100U}, { 0 }, { 0 }}},
+  {.msg = {{FORD_DesiredTorqBrk, 0, 8, .frequency = 50U}, { 0 }, { 0 }}},
 };
 
 static uint8_t ford_get_counter(const CANPacket_t *to_push) {
