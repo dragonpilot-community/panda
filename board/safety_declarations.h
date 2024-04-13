@@ -138,10 +138,16 @@ typedef struct {
   int tx_msgs_len;
 } safety_config;
 
-typedef uint32_t (*get_checksum_t)(CANPacket_t *to_push);
-typedef uint32_t (*compute_checksum_t)(CANPacket_t *to_push);
-typedef uint8_t (*get_counter_t)(CANPacket_t *to_push);
-typedef bool (*get_quality_flag_valid_t)(CANPacket_t *to_push);
+typedef uint32_t (*get_checksum_t)(const CANPacket_t *to_push);
+typedef uint32_t (*compute_checksum_t)(const CANPacket_t *to_push);
+typedef uint8_t (*get_counter_t)(const CANPacket_t *to_push);
+typedef bool (*get_quality_flag_valid_t)(const CANPacket_t *to_push);
+
+typedef safety_config (*safety_hook_init)(uint16_t param);
+typedef void (*rx_hook)(const CANPacket_t *to_push);
+typedef bool (*tx_hook)(const CANPacket_t *to_send);
+typedef bool (*tx_lin_hook)(int lin_num, uint8_t *data, int len);
+typedef int (*fwd_hook)(int bus_num, int addr);
 
 bool safety_rx_hook(CANPacket_t *to_push);
 bool safety_tx_hook(CANPacket_t *to_send);
@@ -155,7 +161,7 @@ bool angle_dist_to_meas_check(int val, struct sample_t *val_meas,
   const int MAX_ERROR, const int MAX_VAL);
 bool dist_to_meas_check(int val, int val_last, struct sample_t *val_meas,
   const int MAX_RATE_UP, const int MAX_RATE_DOWN, const int MAX_ERROR);
-bool driver_limit_check(int val, int val_last, struct sample_t *val_driver,
+bool driver_limit_check(int val, int val_last, const struct sample_t *val_driver,
   const int MAX, const int MAX_RATE_UP, const int MAX_RATE_DOWN,
   const int MAX_ALLOWANCE, const int DRIVER_FACTOR);
 bool get_longitudinal_allowed(void);
@@ -164,12 +170,12 @@ float interpolate(struct lookup_t xy, float x);
 int ROUND(float val);
 void gen_crc_lookup_table_8(uint8_t poly, uint8_t crc_lut[]);
 void gen_crc_lookup_table_16(uint16_t poly, uint16_t crc_lut[]);
-bool msg_allowed(CANPacket_t *to_send, const CanMsg msg_list[], int len);
-int get_addr_check_index(CANPacket_t *to_push, RxCheck addr_list[], const int len);
+bool msg_allowed(const CANPacket_t *to_send, const CanMsg msg_list[], int len);
+int get_addr_check_index(const CANPacket_t *to_push, RxCheck addr_list[], const int len);
 void update_counter(RxCheck addr_list[], int index, uint8_t counter);
 void update_addr_timestamp(RxCheck addr_list[], int index);
 bool is_msg_valid(RxCheck addr_list[], int index);
-bool rx_msg_safety_check(CANPacket_t *to_push,
+bool rx_msg_safety_check(const CANPacket_t *to_push,
                          const safety_config *rx_checks,
                          const get_checksum_t get_checksum,
                          const compute_checksum_t compute_checksum,
@@ -185,7 +191,7 @@ bool longitudinal_speed_checks(int desired_speed, const LongitudinalLimits limit
 bool longitudinal_gas_checks(int desired_gas, const LongitudinalLimits limits);
 bool longitudinal_transmission_rpm_checks(int desired_transmission_rpm, const LongitudinalLimits limits);
 bool longitudinal_brake_checks(int desired_brake, const LongitudinalLimits limits);
-bool longitudinal_interceptor_checks(CANPacket_t *to_send);
+bool longitudinal_interceptor_checks(const CANPacket_t *to_send);
 void pcm_cruise_check(bool cruise_engaged);
 
 typedef safety_config (*safety_hook_init)(uint16_t param);

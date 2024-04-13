@@ -74,7 +74,7 @@ bool toyota_stock_longitudinal = false;
 bool toyota_lta = false;
 int toyota_dbc_eps_torque_factor = 100;   // conversion factor for STEER_TORQUE_EPS in %: see dbc file
 
-static uint32_t toyota_compute_checksum(CANPacket_t *to_push) {
+static uint32_t toyota_compute_checksum(const CANPacket_t *to_push) {
   int addr = GET_ADDR(to_push);
   int len = GET_LEN(to_push);
   uint8_t checksum = (uint8_t)(addr) + (uint8_t)((unsigned int)(addr) >> 8U) + (uint8_t)(len);
@@ -84,12 +84,12 @@ static uint32_t toyota_compute_checksum(CANPacket_t *to_push) {
   return checksum;
 }
 
-static uint32_t toyota_get_checksum(CANPacket_t *to_push) {
+static uint32_t toyota_get_checksum(const CANPacket_t *to_push) {
   int checksum_byte = GET_LEN(to_push) - 1U;
   return (uint8_t)(GET_BYTE(to_push, checksum_byte));
 }
 
-static void toyota_rx_hook(CANPacket_t *to_push) {
+static void toyota_rx_hook(const CANPacket_t *to_push) {
   if (GET_BUS(to_push) == 0U) {
     int addr = GET_ADDR(to_push);
 
@@ -161,8 +161,8 @@ static void toyota_rx_hook(CANPacket_t *to_push) {
   }
 }
 
-static bool toyota_tx_hook(CANPacket_t *to_send) {
-  int tx = 1;
+static bool toyota_tx_hook(const CANPacket_t *to_send) {
+  bool tx = true;
   int addr = GET_ADDR(to_send);
   int bus = GET_BUS(to_send);
 

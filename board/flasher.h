@@ -97,7 +97,7 @@ int comms_control_handler(ControlPacket_t *req, uint8_t *resp) {
   return resp_len;
 }
 
-void comms_can_write(uint8_t *data, uint32_t len) {
+void comms_can_write(const uint8_t *data, uint32_t len) {
   UNUSED(data);
   UNUSED(len);
 }
