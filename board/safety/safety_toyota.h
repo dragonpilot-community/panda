@@ -136,10 +136,18 @@ static void toyota_rx_hook(const CANPacket_t *to_push) {
       }
     }
 
+    // sample speed
     if (addr == 0xaa) {
-      // check that all wheel speeds are at zero value with offset
-      bool standstill = (GET_BYTES(to_push, 0, 4) == 0x6F1A6F1AU) && (GET_BYTES(to_push, 4, 4) == 0x6F1A6F1AU);
-      vehicle_moving = !standstill;
+      int speed = 0;
+      // sum 4 wheel speeds. conversion: raw * 0.01 - 67.67
+      for (uint8_t i = 0U; i < 8U; i += 2U) {
+        int wheel_speed = (GET_BYTE(to_push, i) << 8U) | GET_BYTE(to_push, (i + 1U));
+        speed += wheel_speed - 6767;
+      }
+      // check that all wheel speeds are at zero value
+      vehicle_moving = speed != 0;
+
+      UPDATE_VEHICLE_SPEED(speed / 4.0 * 0.01 / 3.6);
     }
 
     // most cars have brake_pressed on 0x226, corolla and rav4 on 0x224
