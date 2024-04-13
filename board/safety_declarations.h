@@ -150,7 +150,19 @@ typedef bool (*tx_hook)(const CANPacket_t *to_send);
 typedef bool (*tx_lin_hook)(int lin_num, uint8_t *data, int len);
 typedef int (*fwd_hook)(int bus_num, int addr);
 
-bool safety_rx_hook(CANPacket_t *to_push);
+typedef struct {
+  safety_hook_init init;
+  rx_hook rx;
+  tx_hook tx;
+  tx_lin_hook tx_lin;
+  fwd_hook fwd;
+  get_checksum_t get_checksum;
+  compute_checksum_t compute_checksum;
+  get_counter_t get_counter;
+  get_quality_flag_valid_t get_quality_flag_valid;
+} safety_hooks;
+
+bool safety_rx_hook(const CANPacket_t *to_push);
 bool safety_tx_hook(CANPacket_t *to_send);
 bool safety_tx_lin_hook(int lin_num, uint8_t *data, int len);
 uint32_t get_ts_elapsed(uint32_t ts, uint32_t ts_last);
@@ -194,24 +206,6 @@ bool longitudinal_transmission_rpm_checks(int desired_transmission_rpm, const Lo
 bool longitudinal_brake_checks(int desired_brake, const LongitudinalLimits limits);
 bool longitudinal_interceptor_checks(const CANPacket_t *to_send);
 void pcm_cruise_check(bool cruise_engaged);
-
-typedef safety_config (*safety_hook_init)(uint16_t param);
-typedef void (*rx_hook)(CANPacket_t *to_push);
-typedef bool (*tx_hook)(CANPacket_t *to_send);
-typedef bool (*tx_lin_hook)(int lin_num, uint8_t *data, int len);
-typedef int (*fwd_hook)(int bus_num, int addr);
-
-typedef struct {
-  safety_hook_init init;
-  rx_hook rx;
-  tx_hook tx;
-  tx_lin_hook tx_lin;
-  fwd_hook fwd;
-  get_checksum_t get_checksum;
-  compute_checksum_t compute_checksum;
-  get_counter_t get_counter;
-  get_quality_flag_valid_t get_quality_flag_valid;
-} safety_hooks;
 
 void safety_tick(const safety_config *safety_config);
 
