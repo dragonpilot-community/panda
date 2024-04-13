@@ -165,12 +165,15 @@ static void toyota_rx_hook(const CANPacket_t *to_push) {
       gas_interceptor_prev = gas_interceptor;
     }
 
+    #if 0
      // STEERING_LKA
     if (!toyota_stock_longitudinal && (addr == 0x343)) {
       stock_ecu_detected = true;  // ACC_CONTROL
     }
     generic_rx_checks(stock_ecu_detected);
+    #else
     generic_rx_checks((addr == 0x2E4));
+    #endif
   }
 }
 
