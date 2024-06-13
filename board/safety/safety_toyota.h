@@ -290,13 +290,13 @@ static bool toyota_tx_hook(const CANPacket_t *to_send) {
   }
 
   // UDS: Only tester present ("\x0F\x02\x3E\x00\x00\x00\x00\x00") allowed on diagnostics address
-  if (addr == 0x750) {
-    // this address is sub-addressed. only allow tester present to radar (0xF)
-    bool invalid_uds_msg = (GET_BYTES(to_send, 0, 4) != 0x003E020FU) || (GET_BYTES(to_send, 4, 4) != 0x0U);
-    if (invalid_uds_msg) {
-      tx = 0;
-    }
-  }
+//  if (addr == 0x750) {
+//    // this address is sub-addressed. only allow tester present to radar (0xF)
+//    bool invalid_uds_msg = (GET_BYTES(to_send, 0, 4) != 0x003E020FU) || (GET_BYTES(to_send, 4, 4) != 0x0U);
+//    if (invalid_uds_msg) {
+//      tx = 0;
+//    }
+//  }
 
   return tx;
 }
